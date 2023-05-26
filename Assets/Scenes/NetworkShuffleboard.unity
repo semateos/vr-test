@@ -3518,7 +3518,7 @@ PrefabInstance:
     - target: {fileID: 4119735069596841582, guid: d14ccad9a6cb98343abc69e41b5db873,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 4119735069664823418, guid: d14ccad9a6cb98343abc69e41b5db873,
         type: 3}
@@ -3614,6 +3614,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8628735961664520316, guid: d14ccad9a6cb98343abc69e41b5db873,
+        type: 3}
+      propertyPath: m_CameraYOffset
+      value: 1.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d14ccad9a6cb98343abc69e41b5db873, type: 3}

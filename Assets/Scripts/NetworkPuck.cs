@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,9 @@ public class NetworkPuck : NetworkBehaviour
     public bool isOnTable { get; set; } = false;
 
     [Networked]
+    public bool isOnPuck { get; set; } = false;
+
+    [Networked]
     public float Velocity { get; set; }
 
     [Networked]
@@ -34,6 +38,9 @@ public class NetworkPuck : NetworkBehaviour
 
     [Networked(OnChanged = nameof(CollisionsChanged))]
     public int Collisions { get; set; }
+
+    float lastCollisionInstant = 0; 
+    const float collisionInterval = 0.05f;
 
     private static void TeamChanged(Changed<NetworkPuck> changed)
     {
@@ -121,19 +128,43 @@ public class NetworkPuck : NetworkBehaviour
         shuffleboard.OwnAllPucks();
     }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.Proxies)]
-    public void RPC_Collision()
+
+    protected virtual void OnCollisionStay(Collision other)
     {
-        tableNockSound.Play();
+        if (Object.HasStateAuthority)
+        {
+            if (other.gameObject.CompareTag("Puck"))
+            {
+                //Debug.Log("My Puck is on another Puck: " + other);
+
+                isOnPuck = true;
+            }
+            else
+            {
+                isOnPuck = false;
+            }
+        }        
     }
 
     protected virtual void OnCollisionEnter(Collision other)
     {
-        //Debug.Log("Puck Collision " + Object.HasStateAuthority);
-
+        
         if (Object.HasStateAuthority)
         {
-            Collisions++;
+            //Debug.Log("My Puck Collision: " + other);
+
+            //This collision instant
+            float collisionInstant = Time.time;
+
+            //Time elapsed since last collision
+            float collisionTimeDiff = collisionInstant - lastCollisionInstant;
+
+            //Debug.Log("Time since last collision " + collisionTimeDiff);
+
+            if (lastCollisionInstant == 0 || (collisionTimeDiff > collisionInterval)) Collisions++;
+         
+            lastCollisionInstant = collisionInstant; //Set last collision time
+
 
             if (other.gameObject.CompareTag("Table"))
             {

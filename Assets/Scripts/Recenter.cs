@@ -42,12 +42,13 @@ public class Recenter : MonoBehaviour
 
         mainCamera = GameObject.FindWithTag("MainCamera");
 
-        
+        //if in XR mode start the switch from Floor mode to Device
+        //we don't want to do this in Desktop mode
 
-        Reset();
+        if (Origin.activeInHierarchy) Reset();   
     }
 
-    void RecenterTest(XRInputSubsystem xrInput)
+    public void RecenterTest(XRInputSubsystem xrInput)
     {
         Debug.Log("RECENTER EVENT");
 
